@@ -10,9 +10,15 @@ interface IssueItemProps {
 export const IssueItem: React.FC<IssueItemProps> = ({ issue }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const onMouseEnterHandler = () => {
+  const preFetchData = () => {
     queryClient.prefetchQuery(["issue", issue.number], () => getIssueInfo(issue.number));
     queryClient.prefetchQuery(["issue", issue.number, "comments"], () => getIssueComments(issue.number));
+  };
+
+  const preSetDataCache = () => {
+    queryClient.setQueryData(["issue", issue.number], () => issue, {
+      updatedAt: new Date().getTime() + 1000 * 60 * 2,
+    });
   };
   return (
     <div
@@ -20,7 +26,7 @@ export const IssueItem: React.FC<IssueItemProps> = ({ issue }) => {
       onClick={() => {
         navigate(`/issues/issue/${issue.number}`);
       }}
-      onMouseEnter={onMouseEnterHandler}
+      onMouseEnter={preSetDataCache}
     >
       <div className="card-body d-flex align-items-center">
         {issue.state === State.Open ? <FiInfo size={30} color="red" /> : <FiCheckCircle size={30} color="green" />}
