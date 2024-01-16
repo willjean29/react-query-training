@@ -36,6 +36,17 @@ export const IssueItem: React.FC<IssueItemProps> = ({ issue }) => {
           <span className="issue-subinfo">
             {issue.number} opened 2 days ago by <span className="fw-bold">{issue.user.login}</span>
           </span>
+          <div>
+            {issue.labels.map((label) => (
+              <span
+                key={label.id}
+                className="badge rounded-pill m-1"
+                style={{ border: `1px solid #${label.color}`, backgroundColor: `#${label.color}`, color: "#000" }}
+              >
+                {label.name}
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="d-flex align-items-center">
